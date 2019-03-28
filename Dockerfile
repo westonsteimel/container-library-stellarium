@@ -18,6 +18,8 @@
 
 FROM alpine:edge AS builder
 
+ENV STELLARIUM_VERSION v0.19.0
+
 RUN apk upgrade && apk --no-cache add --virtual .build-dependencies \
     cmake \
     make \
@@ -35,7 +37,7 @@ RUN apk upgrade && apk --no-cache add --virtual .build-dependencies \
     qt5-qtlocation-dev \
     qt5-qtserialport-dev \
     qt5-qtscript-dev \
-    && git clone --depth 1 --recurse-submodules https://github.com/Stellarium/stellarium \
+    && git clone --depth 1 --branch "${STELLARIUM_VERSION}" --recurse-submodules https://github.com/Stellarium/stellarium \
     && cd stellarium \
     && cmake -DCMAKE_BUILD_MODE=Release \
     -DENABLE_MEDIA=0 \
