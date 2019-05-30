@@ -80,8 +80,8 @@ RUN apk upgrade && apk --no-cache add \
     qt5-qtserialport \
     qt5-qtscript
 
-RUN addgroup -g 1000 stellarium \
-    && adduser -u 1000 -G stellarium -s /bin/sh -D stellarium
+RUN addgroup stellarium \
+    && adduser -G stellarium -s /bin/sh -D stellarium
 
 USER stellarium
 
