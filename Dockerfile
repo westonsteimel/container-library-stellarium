@@ -16,11 +16,11 @@
 #    --name stellarium \
 #    "${DOCKER_REPO_PREFIX}/stellarium" "$@"
 
-FROM alpine:edge AS builder
+FROM alpine AS builder
 
 ENV STELLARIUM_VERSION v0.19.0
 
-RUN apk upgrade && apk --no-cache add --virtual .build-dependencies \
+RUN apk update && apk --no-cache add --virtual .build-dependencies \
     cmake \
     make \
     g++ \
@@ -62,12 +62,12 @@ RUN apk upgrade && apk --no-cache add --virtual .build-dependencies \
     && apk del .build-dependencies \
     && rm -rf /var/cache/*
 
-FROM alpine:edge
+FROM alpine
 
 COPY --from=builder /usr/local/share/stellarium /usr/local/share/stellarium
 COPY --from=builder /usr/local/bin/stellarium /usr/local/bin/stellarium
 
-RUN apk upgrade && apk --no-cache add \
+RUN apk update && apk --no-cache add \
     mesa-gl \
     mesa-dri-intel \
     lua5.3 \
