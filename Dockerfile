@@ -18,7 +18,7 @@
 
 FROM alpine AS builder
 
-ENV STELLARIUM_VERSION v0.19.0
+ENV STELLARIUM_VERSION v0.19.1
 
 RUN apk update && apk --no-cache add --virtual .build-dependencies \
     cmake \
