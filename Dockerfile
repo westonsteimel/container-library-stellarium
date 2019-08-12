@@ -16,9 +16,12 @@
 #    --name stellarium \
 #    "${DOCKER_REPO_PREFIX}/stellarium" "$@"
 
+ARG STELLARIUM_VERSION="v0.19.1"
+
 FROM alpine AS builder
 
-ENV STELLARIUM_VERSION v0.19.1
+ARG STELLARIUM_VERSION
+ENV STELLARIUM_VERSION "${STELLARIUM_VERSION}"
 
 RUN apk update && apk --no-cache add --virtual .build-dependencies \
     cmake \
@@ -64,6 +67,8 @@ RUN apk update && apk --no-cache add --virtual .build-dependencies \
 
 FROM alpine
 
+ARG STELLARIUM_VERSION
+
 COPY --from=builder /usr/local/share/stellarium /usr/local/share/stellarium
 COPY --from=builder /usr/local/bin/stellarium /usr/local/bin/stellarium
 
@@ -86,3 +91,9 @@ RUN addgroup stellarium \
 USER stellarium
 
 ENTRYPOINT ["stellarium"]
+
+LABEL org.opencontainers.image.title="Stellarium" \
+    org.opencontainers.image.description="Stellarium in Docker" \ 
+    org.opencontainers.image.url="https://github.com/westonsteimel/docker-stellarium" \ 
+    org.opencontainers.image.source="https://github.com/westonsteimel/docker-stellarium" \
+    org.opencontainers.image.version="${STELLARIUM_VERSION}"
