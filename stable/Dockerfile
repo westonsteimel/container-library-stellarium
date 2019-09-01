@@ -96,4 +96,5 @@ LABEL org.opencontainers.image.title="Stellarium" \
     org.opencontainers.image.description="Stellarium in Docker" \ 
     org.opencontainers.image.url="https://github.com/westonsteimel/docker-stellarium" \ 
     org.opencontainers.image.source="https://github.com/westonsteimel/docker-stellarium" \
-    org.opencontainers.image.version="${STELLARIUM_VERSION}"
+    org.opencontainers.image.version="${STELLARIUM_VERSION}" \
+    version="${STELLARIUM_VERSION}"
