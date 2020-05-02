@@ -16,7 +16,7 @@
 #    --name stellarium \
 #    "${DOCKER_REPO_PREFIX}/stellarium" "$@"
 
-ARG STELLARIUM_VERSION="v0.20.0"
+ARG STELLARIUM_VERSION="v0.20.1"
 
 FROM alpine AS builder
 
