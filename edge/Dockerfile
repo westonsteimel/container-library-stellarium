@@ -16,12 +16,17 @@
 #    --name stellarium \
 #    "${DOCKER_REPO_PREFIX}/stellarium" "$@"
 
-ARG STELLARIUM_VERSION="master"
 
-FROM alpine AS builder
+ARG REVISION
+ARG CREATED
+ARG VERSION
+ARG GIT_REF="${VERSION}"
 
-ARG STELLARIUM_VERSION
-ENV STELLARIUM_VERSION "${STELLARIUM_VERSION}"
+FROM alpine:edge AS builder
+
+ARG GIT_REF
+ARG VERSION
+ENV VERSION="${VERSION}"
 
 RUN apk update && apk --no-cache add --virtual .build-dependencies \
     cmake \
@@ -40,7 +45,7 @@ RUN apk update && apk --no-cache add --virtual .build-dependencies \
     qt5-qtlocation-dev \
     qt5-qtserialport-dev \
     qt5-qtscript-dev \
-    && git clone --depth 1 --branch "${STELLARIUM_VERSION}" --recurse-submodules https://github.com/Stellarium/stellarium \
+    && git clone --depth 1 --branch "${GIT_REF}" --recurse-submodules https://github.com/Stellarium/stellarium \
     && cd stellarium \
     && cmake -DCMAKE_BUILD_MODE=Release \
     -DENABLE_MEDIA=0 \
@@ -65,9 +70,12 @@ RUN apk update && apk --no-cache add --virtual .build-dependencies \
     && apk del .build-dependencies \
     && rm -rf /var/cache/*
 
-FROM alpine
+FROM alpine:edge
 
-ARG STELLARIUM_VERSION
+ARG VERSION
+ARG SOURCE
+ARG REVISION
+ARG CREATED
 
 COPY --from=builder /usr/local/share/stellarium /usr/local/share/stellarium
 COPY --from=builder /usr/local/bin/stellarium /usr/local/bin/stellarium
@@ -93,8 +101,9 @@ USER stellarium
 ENTRYPOINT ["stellarium"]
 
 LABEL org.opencontainers.image.title="Stellarium" \
-    org.opencontainers.image.description="Stellarium in Docker" \ 
-    org.opencontainers.image.url="https://github.com/westonsteimel/docker-stellarium" \ 
-    org.opencontainers.image.source="https://github.com/westonsteimel/docker-stellarium" \
-    org.opencontainers.image.version="${STELLARIUM_VERSION}" \
-    version="${STELLARIUM_VERSION}"
+    org.opencontainers.image.description="Stellarium in Docker" \
+    org.opencontainers.image.source="${SOURCE}" \
+    org.opencontainers.image.revision="${REVISION}" \
+    org.opencontainers.image.created="${CREATED}" \
+    org.opencontainers.image.version="${VERSION}"
+
