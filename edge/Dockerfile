@@ -22,7 +22,7 @@ ARG CREATED
 ARG VERSION
 ARG GIT_REF="${VERSION}"
 
-FROM alpine:edge AS builder
+FROM alpine:latest AS builder
 
 ARG GIT_REF
 ARG VERSION
@@ -70,7 +70,7 @@ RUN apk update && apk --no-cache add --virtual .build-dependencies \
     && apk del .build-dependencies \
     && rm -rf /var/cache/*
 
-FROM alpine:edge
+FROM alpine:latest
 
 ARG VERSION
 ARG SOURCE
